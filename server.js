@@ -5,6 +5,8 @@ const path = require('path')
 const mongoose = require('mongoose');
 const cors = require("cors");
 
+
+
 //connect your mongodb Link
 mongoose.connect('mongodb+srv://dbUser:User12345@cluster0.s4zcy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
 
@@ -23,7 +25,7 @@ app.use(express.json())
 // to resolve this, we use Cors but we remove this in production
 app.use(cors(["localhost:3000", "localhost:5000"]))
 
-app.use('/', express.static(path.join(__dirname, '../my-app/build')))
+app.use('/', express.static(path.join(__dirname, './my-app/build')))
 
 
 //for Login Request
