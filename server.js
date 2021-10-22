@@ -65,6 +65,16 @@ app.post('/api/v1/login', (req, res) => {
 })
 
 
+app.get('/api/v1/profile', (req, res) => {
+
+    //checking for any empty field
+    res.redirect('/profile')
+
+})
+
+
+
+
 //For SignUp request
 app.post('/api/v1/signup', (req, res) => {
 

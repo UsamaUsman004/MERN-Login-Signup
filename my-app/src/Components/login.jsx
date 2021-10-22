@@ -38,9 +38,10 @@ export default function LogIn() {
                 password: values.password,
             }).then((res) => {
                 console.log("res: ", res.data);
+                localStorage.setItem('currentUser',JSON.stringify(res.data))
         
                 if (res.data.email) {
-                    history.push("/")
+                    history.push("/profile")
                 }
             })
         }
@@ -48,7 +49,7 @@ export default function LogIn() {
 
 
     return (
-        <div>
+        <div className="LoginMain">
 
             <Container sx={{ marginTop: '5%' }}>
                 <Paper sx={{ p: 5, margin: 'auto', maxWidth: 500, flexGrow: 1 }}>

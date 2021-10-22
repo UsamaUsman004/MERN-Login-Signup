@@ -5,16 +5,10 @@ import { useFormik } from "formik";
 import { Container, Paper, Button, TextField, Stack } from '@mui/material';
 import { Link } from "react-router-dom";
 import { baseUrl } from '../core'
+import { useHistory } from "react-router-dom";
 
-function onSubmitFunction(values ,{ resetForm }) {
-    axios.post(`${baseUrl}/api/v1/signup`, {
-        name: values.name,
-        email: values.email,
-        password: values.password,
-    }).then((res) => {
-        console.log("res: ", res.data);
-    })
-}
+
+
 
 const validationSchema = yup.object({
     email: yup
@@ -33,6 +27,10 @@ const validationSchema = yup.object({
 
 
 export default function SignUp() {
+
+    let history = useHistory();
+
+
     const formik = useFormik({
         validationSchema: validationSchema,
         initialValues: {
@@ -40,11 +38,22 @@ export default function SignUp() {
             email: '',
             password: '',
         },
-        onSubmit: onSubmitFunction
+        onSubmit: function (values, { resetForm }) {
+            axios.post(`${baseUrl}/api/v1/signup`, {
+                name: values.name,
+                email: values.email,
+                password: values.password,
+            }).then((res) => {
+                console.log("res: ", res.data);
+                if (res.data) {
+                    history.push("/login")
+                }
+            })
+        }
     });
 
     return (
-        <div>
+        <div  className="SignUpMain">
             <Container sx={{ marginTop: '5%' }}>
                 <Paper sx={{ p: 5, margin: 'auto', maxWidth: 500, flexGrow: 1 }}>
                     <h1> Sign Up</h1>
