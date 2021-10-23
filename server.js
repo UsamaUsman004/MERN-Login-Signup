@@ -26,7 +26,7 @@ const User = mongoose.model('User', {
 app.use(cors(["localhost:3000", "localhost:5000"]))
 
 app.use(express.json())
-app.use("/", express.static(path.join(__dirname, "./web/build")))
+app.use("/", express.static(path.join(__dirname, "/web/build")))
 
 
 
@@ -64,6 +64,7 @@ app.post('/api/v1/login', (req, res) => {
         }
 
     })
+    
 })
 
 
