@@ -3,7 +3,7 @@ const PORT = process.env.PORT || 5000
 const app = express()
 const path = require('path')
 const mongoose = require('mongoose');
-// const cors = require("cors");
+const cors = require("cors");
 
 
 
@@ -19,13 +19,15 @@ const User = mongoose.model('User', {
 });
 
 
-app.use(express.json())
+// let users = [];
 
 //as we are using the backend and frontend on differennt servers so google wont allow us to do this
 // to resolve this, we use Cors but we remove this in production
-// app.use(cors(["localhost:3000", "localhost:5000"]))
+app.use(cors(["localhost:3000", "localhost:5000"]))
 
-app.use('/', express.static(path.join(__dirname, './my-app/build')))
+app.use(express.json())
+app.use("/", express.static(path.join(__dirname, "./web/build")))
+
 
 
 //for Login Request
@@ -65,12 +67,9 @@ app.post('/api/v1/login', (req, res) => {
 })
 
 
-app.get('/api/v1/profile', (req, res) => {
-
-    //checking for any empty field
-    res.redirect('/profile')
-
-})
+// app.get('/api/v1/profile', (req, res) => {
+//     res.send(users);
+// })
 
 
 
@@ -83,8 +82,8 @@ app.post('/api/v1/signup', (req, res) => {
         console.log("required field missing");
         res.status(403).send("required field missing");
         return;
-    } 
-    
+    }
+
     else {
         console.log(req.body)
 
@@ -94,7 +93,7 @@ app.post('/api/v1/signup', (req, res) => {
             password: req.body.password,
         })
 
-        
+
         newUser.save(() => {
             console.log("data saved")
             res.send('profile created')
@@ -102,6 +101,11 @@ app.post('/api/v1/signup', (req, res) => {
     }
 
 })
+
+// app.get('/profile', (req, res) => {
+//     res.redirect('http://localhost:5000/profile')
+// })
+
 
 app.delete('/api/v1/profile', (req, res) => {
     res.send('profile deleted')
