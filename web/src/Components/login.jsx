@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from "react";
 import * as yup from 'yup';
 import axios from 'axios';
 import { useFormik } from "formik";
@@ -6,6 +6,7 @@ import { Container, Paper, Button, TextField, Stack } from '@mui/material';
 import { Link } from "react-router-dom";
 import { baseUrl } from '../core'
 import { useHistory } from "react-router-dom";
+import Message from './message';
 
 const validationSchema = yup.object({
     email: yup
@@ -21,7 +22,8 @@ const validationSchema = yup.object({
 
 
 export default function LogIn() {
-    let history = useHistory();  
+    let history = useHistory();
+    const [messageBar, setMessageBar] = useState("");
 
     const formik = useFormik({
         validationSchema: validationSchema,
@@ -30,18 +32,30 @@ export default function LogIn() {
             password: '',
         },
         onSubmit: function (values) {
-            
-            console.log("values: ", values)
-        
+            // console.log("values: ", values)
+
             axios.post(`${baseUrl}/api/v1/login`, {
                 email: values.email,
                 password: values.password,
             }).then((res) => {
                 console.log("res: ", res.data);
-                localStorage.setItem('currentUser',JSON.stringify(res.data))
-        
+                // localStorage.setItem('currentUser',JSON.stringify(res.data))
+
+
                 if (res.data.email) {
-                    history.push("/profile")
+                    setTimeout(() => {
+                        history.push("/profile")
+                        setMessageBar([]);
+                    }, 1000);
+                    setMessageBar(true);
+                    // history.push("/profile")
+                }
+
+                else {
+                    setMessageBar(false);
+                    setTimeout(() => {
+                        setMessageBar([]);
+                    }, 1000);
                 }
             })
         }
@@ -50,6 +64,9 @@ export default function LogIn() {
 
     return (
         <div className="LoginMain">
+
+            {messageBar === true ? <Message type="success" message="Welcome" /> : ""}
+            {messageBar === false ? (<Message type="error" message="Invalid email or password" />) : ("")}
 
             <Container sx={{ marginTop: '5%' }}>
                 <Paper sx={{ p: 5, margin: 'auto', maxWidth: 500, flexGrow: 1 }}>
