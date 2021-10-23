@@ -3,7 +3,7 @@ const PORT = process.env.PORT || 5000
 const app = express()
 const path = require('path')
 const mongoose = require('mongoose');
-const cors = require("cors");
+// const cors = require("cors");
 
 
 
@@ -23,7 +23,7 @@ const User = mongoose.model('User', {
 
 //as we are using the backend and frontend on differennt servers so google wont allow us to do this
 // to resolve this, we use Cors but we remove this in production
-app.use(cors(["localhost:3000", "localhost:5000"]))
+// app.use(cors(["localhost:3000", "localhost:5000"]))
 
 app.use(express.json())
 app.use("/", express.static(path.join(__dirname, "./web/build")))
