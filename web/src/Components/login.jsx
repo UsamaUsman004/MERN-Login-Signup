@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import * as yup from 'yup';
 import axios from 'axios';
 import { useFormik } from "formik";
@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { baseUrl } from '../core'
 import { useHistory } from "react-router-dom";
 import Message from './message';
+import { GlobalContext } from '../Context/context'
 
 const validationSchema = yup.object({
     email: yup
@@ -22,6 +23,9 @@ const validationSchema = yup.object({
 
 
 export default function LogIn() {
+
+    let { dispatch } = useContext(GlobalContext);
+
     let history = useHistory();
     const [messageBar, setMessageBar] = useState("");
 
@@ -38,17 +42,38 @@ export default function LogIn() {
                 email: values.email,
                 password: values.password,
             }).then((res) => {
+
                 console.log("res: ", res.data);
+
                 // localStorage.setItem('currentUser',JSON.stringify(res.data))
 
+                // if (res.data.email) {
+                //     setTimeout(() => {
+                //         history.push("/profile")
+                //         setMessageBar([]);
+                //     }, 1000);
+                //     setMessageBar(true);
+                //     // history.push("/profile")
+                // }
 
-                if (res.data.email) {
+
+                if (res.data !== "error") {
+                    dispatch({
+                        type: "USER_LOGIN",
+                        payload: {
+                            name: res.data.name,
+                            email: res.data.email,
+                            password: res.data.password,
+                            created: res.data.created
+                        },
+                    });
+
+                    //message
+                    setMessageBar(true);
                     setTimeout(() => {
-                        history.push("/profile")
+                        history.push("/profile");
                         setMessageBar([]);
                     }, 1000);
-                    setMessageBar(true);
-                    // history.push("/profile")
                 }
 
                 else {
