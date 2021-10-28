@@ -10,6 +10,7 @@ import { useHistory } from "react-router-dom";
 
 
 
+
 const validationSchema = yup.object({
     email: yup
         .string('Enter your email')
@@ -38,6 +39,7 @@ export default function SignUp() {
             email: '',
             password: '',
         },
+
         onSubmit: function (values, { resetForm }) {
             axios.post(`${baseUrl}/api/v1/signup`, {
                 name: values.name,

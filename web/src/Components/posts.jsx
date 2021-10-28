@@ -1,13 +1,35 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import { useState } from 'react';
 import PostsTemplate from './PostsTemplate';
+import React, { useContext, useEffect,useState } from "react";
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
+import TextField from '@mui/material/TextField';
+import * as yup from 'yup';
+import axios from 'axios';
+import { useFormik } from "formik";
+import { baseUrl } from '../core';
+import Stack from '@mui/material/Stack';
+import { GlobalContext } from '../Context/context'
+
+
+const validationSchema = yup.object({
+    subject: yup
+        .string('Enter your Subject')
+        .required('Email is required'),
+    description: yup
+        .string('Enter your Description')
+        .required('Password is required'),
+});
+
+
+
 
 function Posts() {
+
     const [value, setValue] = React.useState('1');
 
     const handleChange = (event, newValue) => {
@@ -15,9 +37,62 @@ function Posts() {
     };
 
 
+    let { state, dispatch } = useContext(GlobalContext);
+    // console.log(state)
+
+    const [allPost, setAllPost] = useState([]);
+    const [continuousPost, setContinuousPost] = useState(false);
+
+
+    useEffect(() => {
+        axios.get(`${baseUrl}/api/v1/post`).then((result) => {
+
+            console.log(result)
+            let arr = [];
+            result.data.forEach((element) => {
+                arr.unshift(element);
+            });
+            setAllPost([...arr]);
+        });
+        return () => {
+            // cleanup
+        };
+        // eslint-disable-next-line
+    }, [continuousPost]);
+
+
+
+
+    const formik = useFormik({
+        validationSchema: validationSchema,
+        initialValues: {
+            subject: '',
+            description: '',
+        },
+
+        onSubmit: function (values) {
+
+            console.log(values);
+
+            axios.post(`${baseUrl}/api/v1/profile`, {
+                user: state.user.name,
+                subject: values.subject,
+                description: values.description,
+            }).then((res) => {
+                console.log("res: ", res.data);
+                // if (res.data) {
+                //     history.push("/login")
+                setContinuousPost(!continuousPost);
+                // }
+            })
+        }
+    });
+
+
     const [posts, setPosts] = useState(
         [
             {
+                key: 1,
                 avatar: 'U',
                 user: 'Usama Usman',
                 date: '27 October 2021',
@@ -27,6 +102,7 @@ function Posts() {
             },
 
             {
+                key: 2,
                 avatar: 'A',
                 user: 'Abdul Rafeh',
                 date: '27 October 2021',
@@ -34,6 +110,7 @@ function Posts() {
                 Description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore temporibus porro quidem laborum maiores? Reprehenderit ratione ipsum recusandae nihil? Alias saepe porro possimus eligendi accusantium odit, at voluptates mollitia vel.'
             },
             {
+                key: 3,
                 avatar: 'J',
                 user: 'Javed Ali',
                 date: '27 October 2021',
@@ -45,24 +122,70 @@ function Posts() {
     );
 
     return (
-        <Box sx={{ width: '100%', typography: 'body1' }}>
-            <TabContext value={value}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                    <TabList onChange={handleChange} aria-label="lab API tabs example" centered>
-                        <Tab label="News Feed" value="1" />
-                        <Tab label="My Posts" value="2" />
+        <div>
 
-                    </TabList>
-                </Box>
-                <TabPanel value="1">
-                    <PostsTemplate posts={posts} />
-                </TabPanel>
-                <TabPanel value="2">
-                    <PostsTemplate posts={posts}  />
-                </TabPanel>
 
-            </TabContext>
-        </Box>
+            <Box sx={{ m: 3 }}>
+                <Paper elevation={3} sx={{ p: 5 }}>
+                    <form onSubmit={formik.handleSubmit}>
+                        <Stack spacing={2}>
+                            <TextField
+                                fullWidth
+                                color="primary"
+                                id="outlined-basic"
+                                label="Subject"
+                                variant="outlined"
+                                name="subject"
+                                value={formik.values.subject}
+                                onChange={formik.handleChange}
+                                error={formik.touched.subject && Boolean(formik.errors.subject)}
+                                helperText={formik.touched.subject && formik.errors.subject}
+                            />
+
+                            <TextField
+                                fullWidth multiline
+                                color="primary" id="outlined-basic" label="Description" variant="outlined" name="description"
+                                rows={4}
+                                value={formik.values.description}
+                                onChange={formik.handleChange}
+                                error={formik.touched.description && Boolean(formik.errors.description)}
+                                helperText={formik.touched.description && formik.errors.description}
+                            />
+
+
+                            <Button fullWidth variant="contained" color="primary" type="submit">Post</Button>
+                        </Stack>
+                    </form>
+                </Paper>
+            </Box>
+
+
+
+
+
+
+
+            <Box sx={{ width: '100%', typography: 'body1' }}>
+                <TabContext value={value}>
+                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                        <TabList onChange={handleChange} aria-label="lab API tabs example" centered>
+                            <Tab label="News Feed" value="1" />
+                            <Tab label="My Posts" value="2" />
+
+                        </TabList>
+                    </Box>
+                    <TabPanel value="1">
+                        <PostsTemplate posts={allPost} />
+                    </TabPanel>
+                    <TabPanel value="2">
+                        Hello
+                        {/* <PostsTemplate posts={posts} /> */}
+                    </TabPanel>
+
+                </TabContext>
+            </Box>
+
+        </div>
     )
 }
 

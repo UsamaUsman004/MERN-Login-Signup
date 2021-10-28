@@ -13,7 +13,7 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 import Divider from '@mui/material/Divider';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
-import EditProfile from './editProfile'
+// import EditProfile from './editProfile'
 // import Stack from '@mui/material/Stack';
 
 export default function SwipeableTemporaryDrawer() {
@@ -80,13 +80,13 @@ export default function SwipeableTemporaryDrawer() {
 
             <Divider />
 
-            <List>
+            {/* <List>
 
                 <ListItem >
                     <EditProfile />
                 </ListItem>
 
-            </List>
+            </List> */}
 
 
         </Box>

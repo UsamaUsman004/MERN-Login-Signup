@@ -18,6 +18,15 @@ const User = mongoose.model('User', {
     created: { type: Date, default: Date.now },
 });
 
+//making schema for Post
+const Post = mongoose.model('Post', {
+    user: String,
+    subject: String,
+    description: String,
+    created: { type: Date, default: Date.now },
+
+})
+
 
 // let users = [];
 
@@ -64,7 +73,7 @@ app.post('/api/v1/login', (req, res) => {
         }
 
     })
-    
+
 })
 
 
@@ -72,14 +81,52 @@ app.post('/api/v1/login', (req, res) => {
 //     res.send(users);
 // })
 
+//For Post request
+app.post('/api/v1/profile', (req, res) => {
+    console.log(req.body)
+    //checking for any empty field
+    if (!req.body.user || !req.body.subject || !req.body.description) {
+        console.log("required field missing");
+        res.status(403).send("required field missing");
+        return;
+    }
 
+    else {
+        console.log(req.body)
+
+        let newPost = new Post({
+            user: req.body.user,
+            subject: req.body.subject,
+            description: req.body.description,
+        })
+
+
+        newPost.save(() => {
+            console.log("data saved")
+            res.send('Post created')
+        })
+    }
+
+})
+
+
+app.get("/api/v1/post", (req, res) => {
+    Post.find({}, (err, data) => {
+        if (err) {
+            res.send(err)
+        }
+        else {
+            res.send(data);
+        }
+    });
+});
 
 
 //For SignUp request
 app.post('/api/v1/signup', (req, res) => {
 
     //checking for any empty field
-    if (!req.body.email || !req.body.password || !req.body.name) {
+    if (!req.body.subject || !req.body.password || !req.body.name) {
         console.log("required field missing");
         res.status(403).send("required field missing");
         return;
@@ -102,6 +149,7 @@ app.post('/api/v1/signup', (req, res) => {
     }
 
 })
+
 
 // app.get('/profile', (req, res) => {
 //     res.redirect('http://localhost:5000/profile')

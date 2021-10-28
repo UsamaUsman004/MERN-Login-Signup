@@ -55,6 +55,9 @@ export default function Dashboard() {
                     </Toolbar>
                 </AppBar>
             </Box>
+
+
+            <h1>Welcome to the App , Navigate to proceed</h1>
         </div>
     )
 }

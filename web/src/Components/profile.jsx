@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -6,15 +6,41 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import ProfileComponenet from './profileComponent'
-import CreatePost from './CreatePost'
 import { GlobalContext } from '../Context/context'
 import Paper from '@mui/material/Paper';
 import Posts from './posts'
+import { useHistory } from "react-router-dom";
+import Message from './message'
+
+
+
 
 export default function Profile() {
+    const history = useHistory();
 
     let { state, dispatch } = useContext(GlobalContext);
     console.log(state);
+
+    const [messageBar, setMessageBar] = useState("");
+
+    const logout = () => {
+        if (state?.user?.name) {
+            setMessageBar(true);
+            setTimeout(() => {
+                history.push("/login");
+                dispatch({
+                    type: "USER_LOGOUT",
+                    payload: null,
+                });
+                setMessageBar([]);
+            }, 1000);
+        } else {
+            setMessageBar(false);
+            setTimeout(() => {
+                setMessageBar([]);
+            }, 1000);
+        }
+    };
 
     return (
 
@@ -27,9 +53,9 @@ export default function Profile() {
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                             Dashboard
                         </Typography>
-                        <CreatePost/>
+
                         <ProfileComponenet />
-                        <Button color="inherit">Logout</Button>
+                        <Button color="inherit" onClick={logout}>Logout</Button>
                     </Toolbar>
                 </AppBar>
             </Box>
@@ -38,9 +64,22 @@ export default function Profile() {
                 <h2>Hello There</h2>
             </Paper> */}
 
+            {/* <CreatePost /> */}
+
             <Paper variant="outlined" >
                 <Posts />
             </Paper>
+
+            {messageBar === true ? (
+                <Message type="success" message="Good bye!" />
+            ) : (
+                ""
+            )}
+            {messageBar === false ? (
+                <Message type="error" message="Sorry! Something went wrong" />
+            ) : (
+                ""
+            )}
         </div>
     )
 }
