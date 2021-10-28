@@ -21,6 +21,7 @@ const User = mongoose.model('User', {
 //making schema for Post
 const Post = mongoose.model('Post', {
     user: String,
+    email: String,
     subject: String,
     description: String,
     created: { type: Date, default: Date.now },
@@ -85,7 +86,7 @@ app.post('/api/v1/login', (req, res) => {
 app.post('/api/v1/profile', (req, res) => {
     console.log(req.body)
     //checking for any empty field
-    if (!req.body.user || !req.body.subject || !req.body.description) {
+    if (!req.body.user || !req.body.subject || !req.body.description || !req.body.email) {
         console.log("required field missing");
         res.status(403).send("required field missing");
         return;
@@ -96,6 +97,7 @@ app.post('/api/v1/profile', (req, res) => {
 
         let newPost = new Post({
             user: req.body.user,
+            email:req.body.email,
             subject: req.body.subject,
             description: req.body.description,
         })
@@ -126,7 +128,7 @@ app.get("/api/v1/post", (req, res) => {
 app.post('/api/v1/signup', (req, res) => {
 
     //checking for any empty field
-    if (!req.body.subject || !req.body.password || !req.body.name) {
+    if (!req.body.name || !req.body.password || !req.body.email) {
         console.log("required field missing");
         res.status(403).send("required field missing");
         return;
@@ -159,6 +161,11 @@ app.post('/api/v1/signup', (req, res) => {
 app.delete('/api/v1/profile', (req, res) => {
     res.send('profile deleted')
 })
+
+app.use("/**", (req, res) => {
+    // res.redirect("/")
+    res.sendFile(path.join(__dirname, "/web/build/index.html"));
+});
 
 app.listen(PORT, () => {
     console.log(`Example app listening at http://localhost:${PORT}`)

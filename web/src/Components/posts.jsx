@@ -38,7 +38,7 @@ function Posts() {
 
 
     let { state, dispatch } = useContext(GlobalContext);
-    // console.log(state)
+    console.log(state)
 
     const [allPost, setAllPost] = useState([]);
     const [continuousPost, setContinuousPost] = useState(false);
@@ -76,6 +76,7 @@ function Posts() {
 
             axios.post(`${baseUrl}/api/v1/profile`, {
                 user: state.user.name,
+                email : state.user.email,
                 subject: values.subject,
                 description: values.description,
             }).then((res) => {
