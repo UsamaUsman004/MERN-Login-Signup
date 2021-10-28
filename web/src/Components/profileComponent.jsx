@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { GlobalContext } from '../Context/context'
 import Box from '@mui/material/Box';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
@@ -13,6 +13,7 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 import Divider from '@mui/material/Divider';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
+import EditProfile from './editProfile'
 // import Stack from '@mui/material/Stack';
 
 export default function SwipeableTemporaryDrawer() {
@@ -75,6 +76,19 @@ export default function SwipeableTemporaryDrawer() {
                     <ListItemText primary={state.user.created} />
                 </ListItem>
             </List>
+
+
+            <Divider />
+
+            <List>
+
+                <ListItem >
+                    <EditProfile />
+                </ListItem>
+
+            </List>
+
+
         </Box>
     );
 

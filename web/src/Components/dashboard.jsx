@@ -44,9 +44,9 @@ export default function Dashboard() {
                             Signup
                         </Button>
 
-                        <Button color="inherit" onClick={() => history.push("/profile")}>
+                        {/* <Button color="inherit" onClick={() => history.push("/profile")}>
                             Profile
-                        </Button>
+                        </Button> */}
 
                         {/* 
                         <Link to="/login" sx={{ margin: 1 }} color="inherit" underline="none" >Login</Link>
