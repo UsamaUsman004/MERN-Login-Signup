@@ -19,7 +19,7 @@ export default function Profile() {
     const history = useHistory();
 
     let { state, dispatch } = useContext(GlobalContext);
-    console.log(state);
+    // console.log("State ==>",state);
 
     const [messageBar, setMessageBar] = useState("");
 

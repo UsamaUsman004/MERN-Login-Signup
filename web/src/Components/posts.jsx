@@ -38,7 +38,7 @@ function Posts() {
 
 
     let { state, dispatch } = useContext(GlobalContext);
-    console.log(state)
+    // console.log(state)
 
     const [allPost, setAllPost] = useState([]);
     const [continuousPost, setContinuousPost] = useState(false);
@@ -47,7 +47,7 @@ function Posts() {
     useEffect(() => {
         axios.get(`${baseUrl}/api/v1/post`).then((result) => {
 
-            console.log(result)
+            console.log("POSTS in DB ==>",result)
             let arr = [];
             result.data.forEach((element) => {
                 arr.unshift(element);

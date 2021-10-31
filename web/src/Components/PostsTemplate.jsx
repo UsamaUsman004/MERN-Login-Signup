@@ -14,7 +14,7 @@ import Divider from '@mui/material/Divider';
 
 export default function AllPosts(props) {
 
-    console.log("Data in Props ==>", props)
+    // console.log("Data in Props ==>", props)
     return (
         <div>
             

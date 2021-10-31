@@ -43,7 +43,7 @@ export default function LogIn() {
                 password: values.password,
             }).then((res) => {
 
-                console.log("res: ", res.data);
+                // console.log("res: ", res.data);
 
                 // localStorage.setItem('currentUser',JSON.stringify(res.data))
 
@@ -61,10 +61,15 @@ export default function LogIn() {
                     dispatch({
                         type: "USER_LOGIN",
                         payload: {
-                            name: res.data.name,
-                            email: res.data.email,
-                            password: res.data.password,
+                            token:res.data.token,
+                            name:res.data.name,
+                            email:res.data.email,
+                            _id:res.data._id,
                             created: res.data.created
+                            // name: res.data.name,
+                            // email: res.data.email,
+                            // password: res.data.password,
+                            // created: res.data.created
                         },
                     });
 

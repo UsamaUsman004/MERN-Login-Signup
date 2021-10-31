@@ -64,7 +64,7 @@ export default function SignUp() {
                             <TextField
                                 fullWidth
                                 color="primary"
-                                id="outlined-basic"
+                                id="name"
                                 label="Name"
                                 variant="outlined"
                                 name="name"
@@ -77,7 +77,7 @@ export default function SignUp() {
                             <TextField
                                 fullWidth
                                 color="primary"
-                                id="outlined-basic"
+                                id="email"
                                 label="Email"
                                 variant="outlined"
                                 name="email"
@@ -90,7 +90,7 @@ export default function SignUp() {
                             <TextField
                                 fullWidth
                                 color="primary"
-                                id="filled-basic"
+                                id="password"
                                 label="Password"
                                 variant="outlined"
                                 type="password"
