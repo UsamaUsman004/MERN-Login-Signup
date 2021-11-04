@@ -20,7 +20,6 @@ export default function SwipeableTemporaryDrawer() {
 
     let { state, dispatch } = useContext(GlobalContext);
 
-
     const [menuToggle, setmenuToggle] = React.useState({
         left: false,
     });

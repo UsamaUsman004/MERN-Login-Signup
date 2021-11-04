@@ -52,6 +52,7 @@ function Posts() {
             result.data.forEach((element) => {
                 arr.unshift(element);
             });
+
             setAllPost([...arr]);
         });
         return () => {
@@ -74,7 +75,7 @@ function Posts() {
 
             console.log(values);
 
-            axios.post(`${baseUrl}/api/v1/profile`, {
+            axios.post(`${baseUrl}/api/v1/post`, {
                 user: state.user.name,
                 email : state.user.email,
                 subject: values.subject,
@@ -90,37 +91,37 @@ function Posts() {
     });
 
 
-    const [posts, setPosts] = useState(
-        [
-            {
-                key: 1,
-                avatar: 'U',
-                user: 'Usama Usman',
-                date: '27 October 2021',
-                main: 'Dummy',
-                Description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore temporibus porro quidem laborum maiores? Reprehenderit ratione ipsum recusandae nihil? Alias saepe porro possimus eligendi accusantium odit, at voluptates mollitia vel.'
+    // const [posts, setPosts] = useState(
+    //     [
+    //         {
+    //             key: 1,
+    //             avatar: 'U',
+    //             user: 'Usama Usman',
+    //             date: '27 October 2021',
+    //             main: 'Dummy',
+    //             Description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore temporibus porro quidem laborum maiores? Reprehenderit ratione ipsum recusandae nihil? Alias saepe porro possimus eligendi accusantium odit, at voluptates mollitia vel.'
 
-            },
+    //         },
 
-            {
-                key: 2,
-                avatar: 'A',
-                user: 'Abdul Rafeh',
-                date: '27 October 2021',
-                main: 'Abdul Rafeh',
-                Description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore temporibus porro quidem laborum maiores? Reprehenderit ratione ipsum recusandae nihil? Alias saepe porro possimus eligendi accusantium odit, at voluptates mollitia vel.'
-            },
-            {
-                key: 3,
-                avatar: 'J',
-                user: 'Javed Ali',
-                date: '27 October 2021',
-                main: 'Javed Ali',
-                Description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore temporibus porro quidem laborum maiores? Reprehenderit ratione ipsum recusandae nihil? Alias saepe porro possimus eligendi accusantium odit, at voluptates mollitia vel.'
+    //         {
+    //             key: 2,
+    //             avatar: 'A',
+    //             user: 'Abdul Rafeh',
+    //             date: '27 October 2021',
+    //             main: 'Abdul Rafeh',
+    //             Description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore temporibus porro quidem laborum maiores? Reprehenderit ratione ipsum recusandae nihil? Alias saepe porro possimus eligendi accusantium odit, at voluptates mollitia vel.'
+    //         },
+    //         {
+    //             key: 3,
+    //             avatar: 'J',
+    //             user: 'Javed Ali',
+    //             date: '27 October 2021',
+    //             main: 'Javed Ali',
+    //             Description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore temporibus porro quidem laborum maiores? Reprehenderit ratione ipsum recusandae nihil? Alias saepe porro possimus eligendi accusantium odit, at voluptates mollitia vel.'
 
-            },
-        ]
-    );
+    //         },
+    //     ]
+    // );
 
     return (
         <div>

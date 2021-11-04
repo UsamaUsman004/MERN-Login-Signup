@@ -58,10 +58,13 @@ export default function LogIn() {
 
 
                 if (res.data !== "error") {
+
+                    console.log(res.data);
+                    
                     dispatch({
                         type: "USER_LOGIN",
                         payload: {
-                            token:res.data.token,
+                            // token:res.data.token,
                             name:res.data.name,
                             email:res.data.email,
                             _id:res.data._id,

@@ -2,20 +2,17 @@ export const reducer = (state, action) => {
     switch (action.type) {
 
         case "USER_LOGIN": {
-            if (action.payload.token &&
+            if (
                 action.payload.name &&
                 action.payload.email &&
-                // action.payload.password &&
                 action.payload._id &&
                 action.payload.created) {
-                console.log("CurrentUser ==>",action.payload)
+                console.log("CurrentUser ==>", action.payload)
                 return { ...state, user: action.payload };
             }
 
             else {
-                console.log(`invalid data in USER_LOGIN reducer `,action.payload);
-
-
+                console.log(`invalid data in USER_LOGIN reducer `, action.payload);
                 return state;
             }
         }

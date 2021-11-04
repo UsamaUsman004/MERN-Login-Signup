@@ -7,10 +7,6 @@ import { Link } from "react-router-dom";
 import { baseUrl } from '../core'
 import { useHistory } from "react-router-dom";
 
-
-
-
-
 const validationSchema = yup.object({
     email: yup
         .string('Enter your email')

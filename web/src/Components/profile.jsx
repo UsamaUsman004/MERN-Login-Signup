@@ -11,35 +11,39 @@ import Paper from '@mui/material/Paper';
 import Posts from './posts'
 import { useHistory } from "react-router-dom";
 import Message from './message'
-
-
-
+import axios from 'axios';
+import { baseUrl } from '../core';
 
 export default function Profile() {
     const history = useHistory();
 
     let { state, dispatch } = useContext(GlobalContext);
-    // console.log("State ==>",state);
 
     const [messageBar, setMessageBar] = useState("");
 
     const logout = () => {
-        if (state?.user?.name) {
-            setMessageBar(true);
-            setTimeout(() => {
-                history.push("/login");
-                dispatch({
-                    type: "USER_LOGOUT",
-                    payload: null,
-                });
-                setMessageBar([]);
-            }, 1000);
-        } else {
-            setMessageBar(false);
-            setTimeout(() => {
-                setMessageBar([]);
-            }, 1000);
-        }
+        axios.post(`${baseUrl}/api/v1/logout`, {}, {
+            withCredentials: true
+        }).then((res) => {
+            if (state?.user?.name) {
+                setMessageBar(true);
+                setTimeout(() => {
+                    history.push("/login");
+                    dispatch({
+                        type: "USER_LOGOUT",
+                        payload: null,
+                    });
+                    setMessageBar([]);
+                }, 1000);
+            }
+
+            else {
+                setMessageBar(false);
+                setTimeout(() => {
+                    setMessageBar([]);
+                }, 1000);
+            }
+        });
     };
 
     return (
@@ -60,27 +64,25 @@ export default function Profile() {
                 </AppBar>
             </Box>
 
-            {/* <Paper variant="outlined" >
-                <h2>Hello There</h2>
-            </Paper> */}
-
-            {/* <CreatePost /> */}
-
             <Paper variant="outlined" >
                 <Posts />
             </Paper>
 
-            {messageBar === true ? (
-                <Message type="success" message="Good bye!" />
-            ) : (
-                ""
-            )}
-            {messageBar === false ? (
-                <Message type="error" message="Sorry! Something went wrong" />
-            ) : (
-                ""
-            )}
-        </div>
+            {
+                messageBar === true ? (
+                    <Message type="success" message="Good bye!" />
+                ) : (
+                    ""
+                )
+            }
+            {
+                messageBar === false ? (
+                    <Message type="error" message="Sorry! Something went wrong" />
+                ) : (
+                    ""
+                )
+            }
+        </div >
     )
 }
 
