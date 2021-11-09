@@ -4,7 +4,7 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import PostsTemplate from './PostsTemplate';
-import React, { useContext, useEffect,useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
@@ -14,6 +14,9 @@ import { useFormik } from "formik";
 import { baseUrl } from '../core';
 import Stack from '@mui/material/Stack';
 import { GlobalContext } from '../Context/context'
+import Skeleton from '@mui/material/Skeleton';
+import Grid from '@mui/material/Grid';
+
 
 
 const validationSchema = yup.object({
@@ -37,29 +40,40 @@ function Posts() {
     };
 
 
-    let { state, dispatch } = useContext(GlobalContext);
+    let { state } = useContext(GlobalContext);
     // console.log(state)
 
-    const [allPost, setAllPost] = useState([]);
+    const [allPost, setAllPost] = useState(null);
     const [continuousPost, setContinuousPost] = useState(false);
+    const [currentUserPosts, setCurrentUserPosts] = useState(null);
 
 
     useEffect(() => {
         axios.get(`${baseUrl}/api/v1/post`).then((result) => {
 
-            console.log("POSTS in DB ==>",result)
+            console.log("POSTS in DB ==>", result)
             let arr = [];
             result.data.forEach((element) => {
                 arr.unshift(element);
             });
 
             setAllPost([...arr]);
+
+
+            let currentUserPosts = arr.filter(post => post.email === state.user.email)
+            setCurrentUserPosts(currentUserPosts)
+
         });
         return () => {
             // cleanup
         };
+
         // eslint-disable-next-line
     }, [continuousPost]);
+
+
+
+
 
 
 
@@ -71,13 +85,15 @@ function Posts() {
             description: '',
         },
 
+
+
         onSubmit: function (values) {
 
             console.log(values);
 
             axios.post(`${baseUrl}/api/v1/post`, {
                 user: state.user.name,
-                email : state.user.email,
+                email: state.user.email,
                 subject: values.subject,
                 description: values.description,
             }).then((res) => {
@@ -177,11 +193,71 @@ function Posts() {
                         </TabList>
                     </Box>
                     <TabPanel value="1">
-                        <PostsTemplate posts={allPost} />
+
+                        {
+                            allPost && (<PostsTemplate posts={allPost} />)
+                        }
+
+
+                        {
+                            !allPost && <div>
+
+                                <Grid container spacing={2} sx={{ flexGrow: 1 }} justifyContent="center">
+                                    <Grid item md={6}>
+                                        <Stack spacing={1}>
+                                            <Skeleton variant="text" />
+                                            <Skeleton variant="circular" width={40} height={40} />
+                                            <Skeleton variant="rectangular" width={210} height={250} />
+                                        </Stack>
+                                    </Grid>
+
+                                    <Grid item md={6}>
+                                        <Stack spacing={1}>
+                                            <Skeleton variant="text" />
+                                            <Skeleton variant="circular" width={40} height={40} />
+                                            <Skeleton variant="rectangular" width={210} height={250} />
+                                        </Stack>
+                                    </Grid>
+
+                                </Grid>
+
+
+                            </div>
+                        }
+
+
                     </TabPanel>
                     <TabPanel value="2">
-                        Hello
-                        {/* <PostsTemplate posts={posts} /> */}
+                        {
+                            currentUserPosts && (<PostsTemplate posts={currentUserPosts} />)
+                        }
+
+
+                        {
+                            !currentUserPosts && <div>
+
+                                <Grid container spacing={2} sx={{ flexGrow: 1 }} justifyContent="center">
+                                    <Grid item md={6}>
+                                        <Stack spacing={1}>
+                                            <Skeleton variant="text" />
+                                            <Skeleton variant="circular" width={40} height={40} />
+                                            <Skeleton variant="rectangular" width={210} height={250} />
+                                        </Stack>
+                                    </Grid>
+
+                                    <Grid item md={6}>
+                                        <Stack spacing={1}>
+                                            <Skeleton variant="text" />
+                                            <Skeleton variant="circular" width={40} height={40} />
+                                            <Skeleton variant="rectangular" width={210} height={250} />
+                                        </Stack>
+                                    </Grid>
+
+                                </Grid>
+
+
+                            </div>
+                        }
                     </TabPanel>
 
                 </TabContext>

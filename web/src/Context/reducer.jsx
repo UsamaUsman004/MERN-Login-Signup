@@ -4,9 +4,11 @@ export const reducer = (state, action) => {
         case "USER_LOGIN": {
             if (
                 action.payload.name &&
-                action.payload.email &&
-                action.payload._id &&
-                action.payload.created) {
+                action.payload.email && action.payload._id
+                // action.payload._id &&
+                // action.payload.created
+                
+                ) {
                 console.log("CurrentUser ==>", action.payload)
                 return { ...state, user: action.payload };
             }

@@ -59,6 +59,10 @@ app.use(cors({
 
 app.use("/", express.static(path.join(__dirname, "/web/build")))
 
+app.get("/", (req, res, next) => {
+    res.sendFile(path.join(__dirname, "/web/build/index.html"))
+})
+
 //for Login Request
 app.post('/api/v1/login', (req, res, next) => {
 
@@ -91,7 +95,7 @@ app.post('/api/v1/login', (req, res, next) => {
 
                         res.cookie("token", token, {
                             httpOnly: true,
-                            maxAge: 300000
+                            maxAge: 3000000
                         });
 
                         res.send({
@@ -188,7 +192,7 @@ app.use((req, res, next) => {
 
 //For Post request
 app.post('/api/v1/post', (req, res) => {
-    console.log("Response Recieved -->",req.body)
+    console.log("Response Recieved -->", req.body)
     //checking for any empty field
     if (!req.body.user || !req.body.subject || !req.body.description || !req.body.email) {
         console.log("required field missing");
@@ -227,6 +231,20 @@ app.get("/api/v1/post", (req, res) => {
             res.send(data);
         }
     });
+});
+
+
+app.get("/api/v1/mypost", (req, res) => {
+    Post.find(
+        { 'email': req.body.email },
+        (err, data) => {
+            if (err) {
+                res.send(err)
+            }
+            else {
+                res.send(data);
+            }
+        });
 });
 
 

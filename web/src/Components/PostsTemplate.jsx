@@ -10,8 +10,6 @@ import { red } from '@mui/material/colors';
 import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 
-
-
 export default function AllPosts(props) {
 
     // console.log("Data in Props ==>", props)
@@ -25,6 +23,7 @@ export default function AllPosts(props) {
                         <Grid item md={6} key={post._id}>
 
                             <Card sx={{ maxWidth: 'auto' , height :'250px'}}>
+                            
                                 <CardHeader
                                     avatar={<Avatar sx={{ bgcolor: red[500] }} aria-label="recipe"> A </Avatar>}
                                     title={post.user} subheader={post.created}

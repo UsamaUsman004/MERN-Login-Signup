@@ -35,7 +35,10 @@ export default function LogIn() {
             email: '',
             password: '',
         },
-        onSubmit: function (values) {
+        onSubmit: function (values,
+            //  { resetForm }
+
+        ) {
             // console.log("values: ", values)
 
             axios.post(`${baseUrl}/api/v1/login`, {
@@ -55,19 +58,19 @@ export default function LogIn() {
                 //     setMessageBar(true);
                 //     // history.push("/profile")
                 // }
-
+                // resetForm({})
 
                 if (res.data !== "error") {
 
                     console.log(res.data);
-                    
+
                     dispatch({
                         type: "USER_LOGIN",
                         payload: {
                             // token:res.data.token,
-                            name:res.data.name,
-                            email:res.data.email,
-                            _id:res.data._id,
+                            name: res.data.name,
+                            email: res.data.email,
+                            _id: res.data._id,
                             created: res.data.created
                             // name: res.data.name,
                             // email: res.data.email,

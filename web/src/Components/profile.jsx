@@ -19,6 +19,8 @@ export default function Profile() {
 
     let { state, dispatch } = useContext(GlobalContext);
 
+    console.log("State in Profile Page",state)
+
     const [messageBar, setMessageBar] = useState("");
 
     const logout = () => {
@@ -28,7 +30,7 @@ export default function Profile() {
             if (state?.user?.name) {
                 setMessageBar(true);
                 setTimeout(() => {
-                    history.push("/login");
+                    history.push("/");
                     dispatch({
                         type: "USER_LOGOUT",
                         payload: null,

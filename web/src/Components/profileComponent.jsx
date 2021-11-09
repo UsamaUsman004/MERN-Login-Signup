@@ -19,6 +19,7 @@ import Typography from '@mui/material/Typography';
 export default function SwipeableTemporaryDrawer() {
 
     let { state, dispatch } = useContext(GlobalContext);
+    console.log("Profile==>",state)
 
     const [menuToggle, setmenuToggle] = React.useState({
         left: false,
