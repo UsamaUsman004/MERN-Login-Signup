@@ -35,18 +35,17 @@ export default function LogIn() {
             email: '',
             password: '',
         },
-        onSubmit: function (values,
-            //  { resetForm }
-
-        ) {
+        onSubmit:(values )=> {
             // console.log("values: ", values)
 
             axios.post(`${baseUrl}/api/v1/login`, {
                 email: values.email,
                 password: values.password,
+            },{
+                withCredentials: true
             }).then((res) => {
 
-                // console.log("res: ", res.data);
+                console.log("res: ", res.data);
 
                 // localStorage.setItem('currentUser',JSON.stringify(res.data))
 
@@ -60,9 +59,9 @@ export default function LogIn() {
                 // }
                 // resetForm({})
 
-                if (res.data !== "error") {
+                if (res.data) {
 
-                    console.log(res.data);
+            //         console.log(res.data);
 
                     dispatch({
                         type: "USER_LOGIN",
@@ -79,7 +78,7 @@ export default function LogIn() {
                         },
                     });
 
-                    //message
+            //         //message
                     setMessageBar(true);
                     setTimeout(() => {
                         history.push("/profile");
@@ -93,6 +92,8 @@ export default function LogIn() {
                         setMessageBar([]);
                     }, 1000);
                 }
+            }).catch((e) => {
+                console.log("receive error from database", e);
             })
         }
     });

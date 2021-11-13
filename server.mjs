@@ -59,8 +59,49 @@ app.use(cors({
 
 app.use("/", express.static(path.join(__dirname, "/web/build")))
 
-app.get("/", (req, res, next) => {
-    res.sendFile(path.join(__dirname, "/web/build/index.html"))
+// app.get("/", (req, res, next) => {
+//     res.sendFile(path.join(__dirname, "/web/build/index.html"))
+// })
+
+
+//For SignUp request
+app.post('/api/v1/signup', (req, res, next) => {
+
+    //checking for any empty field
+    if (!req.body.name || !req.body.password || !req.body.email) {
+        console.log("required field missing");
+        res.status(403).send("required field missing");
+        return;
+    }
+
+    else {
+        //checking if user exists or not
+        User.findOne({ email: req.body.email }, (err, user) => {
+            if (user) {
+                res.send("user already exist");
+            } else {
+                console.log(req.body)
+
+                stringToHash(req.body.password).then(passwordHash => {
+                    console.log("hash: ", passwordHash);
+
+                    let newUser = new User({
+                        name: req.body.name,
+                        email: req.body.email,
+                        password: passwordHash,
+                    })
+
+
+                    newUser.save(() => {
+                        console.log("data saved")
+                        res.send('signup success')
+                    })
+
+                })
+            }
+        })
+    }
+
 })
 
 //for Login Request
@@ -121,54 +162,9 @@ app.post('/api/v1/login', (req, res, next) => {
     })
 })
 
-
-
-//For SignUp request
-app.post('/api/v1/signup', (req, res, next) => {
-
-    //checking for any empty field
-    if (!req.body.name || !req.body.password || !req.body.email) {
-        console.log("required field missing");
-        res.status(403).send("required field missing");
-        return;
-    }
-
-    else {
-        //checking if user exists or not
-        User.findOne({ email: req.body.email }, (err, user) => {
-            if (user) {
-                res.send("user already exist");
-            } else {
-                console.log(req.body)
-
-                stringToHash(req.body.password).then(passwordHash => {
-                    console.log("hash: ", passwordHash);
-
-                    let newUser = new User({
-                        name: req.body.name,
-                        email: req.body.email,
-                        password: passwordHash,
-                    })
-
-
-                    newUser.save(() => {
-                        console.log("data saved")
-                        res.send('signup success')
-                    })
-
-                })
-            }
-        })
-    }
-
-})
-
-
-
 // app.get('/api/v1/profile', (req, res) => {
 //     res.send(users);
 // })
-
 
 
 // app won't proceed if it not gets the token
@@ -188,6 +184,26 @@ app.use((req, res, next) => {
             }
         })
 });
+
+
+app.get('/api/v1/profile', (req, res) => {
+    User.findOne({ email: req.body._decoded.email }, (err, user) => {
+
+        if (err) {
+            res.status(500).send("error in getting database")
+        } else {
+            if (user) {
+                res.send({
+                    name: user.name,
+                    email: user.email,
+                    _id: user._id,
+                });
+            } else {
+                res.send("user not found");
+            }
+        }
+    })
+})
 
 
 //For Post request
@@ -218,9 +234,6 @@ app.post('/api/v1/post', (req, res) => {
     }
 
 })
-
-
-
 
 app.get("/api/v1/post", (req, res) => {
     Post.find({}, (err, data) => {
@@ -253,30 +266,12 @@ app.get("/api/v1/mypost", (req, res) => {
 app.post('/api/v1/logout', (req, res, next) => {
     res.cookie("token", "", {
         httpOnly: true,
-        maxAge: 300000
+        // maxAge: 300000
     });
     res.send();
 })
 
 
-app.get('/api/v1/profile', (req, res) => {
-    User.findOne({ email: req.body._decoded.email }, (err, user) => {
-
-        if (err) {
-            res.status(500).send("error in getting database")
-        } else {
-            if (user) {
-                res.send({
-                    name: user.name,
-                    email: user.email,
-                    _id: user._id,
-                });
-            } else {
-                res.send("user not found");
-            }
-        }
-    })
-})
 
 
 // app.get('/profile', (req, res) => {
@@ -284,9 +279,9 @@ app.get('/api/v1/profile', (req, res) => {
 // })
 
 
-app.delete('/api/v1/profile', (req, res) => {
-    res.send('profile deleted')
-})
+// app.delete('/api/v1/profile', (req, res) => {
+//     res.send('profile deleted')
+// })
 
 app.use("/**", (req, res) => {
     // res.redirect("/")

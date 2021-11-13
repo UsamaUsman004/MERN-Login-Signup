@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext, useEffect, useState } from "react";
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -9,24 +9,56 @@ import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
+import { GlobalContext } from '../Context/context'
+import ModalContent from './ModalContent'
 
 export default function AllPosts(props) {
+
+    let { state } = useContext(GlobalContext);
+
+    // console.log("POst template", state)
 
     // console.log("Data in Props ==>", props)
     return (
         <div>
-            
+
             <Grid container spacing={2} sx={{ flexGrow: 1 }} justifyContent="center">
                 {props.posts.map(post => {
                     return (
 
                         <Grid item md={6} key={post._id}>
 
-                            <Card sx={{ maxWidth: 'auto' , height :'250px'}}>
-                            
+                            <Card sx={{ maxWidth: 'auto', height: '250px' }}>
+
+
+
                                 <CardHeader
                                     avatar={<Avatar sx={{ bgcolor: red[500] }} aria-label="recipe"> A </Avatar>}
                                     title={post.user} subheader={post.created}
+
+
+
+
+
+                                    action={
+
+                                        (state.user.email === post.email) ?
+                                            // <IconButton aria-label="settings">
+                                            //     <EditIcon />
+                                            // </IconButton>
+
+                                            <ModalContent />
+                                            :
+                                            <IconButton aria-label="settings">
+                                                <MoreVertIcon />
+                                            </IconButton>
+
+
+
+                                    }
                                 />
                                 <Divider />
 

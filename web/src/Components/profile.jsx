@@ -19,7 +19,7 @@ export default function Profile() {
 
     let { state, dispatch } = useContext(GlobalContext);
 
-    console.log("State in Profile Page",state)
+    // console.log("State in Profile Page",state)
 
     const [messageBar, setMessageBar] = useState("");
 

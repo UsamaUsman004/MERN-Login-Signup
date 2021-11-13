@@ -9,7 +9,7 @@ export const reducer = (state, action) => {
                 // action.payload.created
                 
                 ) {
-                console.log("CurrentUser ==>", action.payload)
+                // console.log("CurrentUser ==>", action.payload)
                 return { ...state, user: action.payload };
             }
 
