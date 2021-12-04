@@ -5,9 +5,11 @@ import LogIn from "./Components/login";
 import Profile from "./Components/profile";
 import Dashboard from "./Components/dashboard";
 import { Switch, Route } from "react-router-dom";
+import forgetPassword from "./Components/forgetPassword";
 
 import axios from "axios";
 import { GlobalContext } from "./Context/context";
+// import {storage} from './firebase'
 
 
 function App() {
@@ -42,6 +44,10 @@ function App() {
     return () => {};
     // eslint-disable-next-line
   }, []);
+
+
+
+  
 
   return (
     <div>
@@ -79,6 +85,7 @@ function App() {
           <Route exact path="/" component={Dashboard} />
           <Route exact path="/login" component={LogIn} />
           <Route exact path="/signup" component={SignUp} />
+          <Route path="/forget_password" component={forgetPassword} />
           <Route path="*">
             <Dashboard />
           </Route>

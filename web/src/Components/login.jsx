@@ -141,6 +141,8 @@ export default function LogIn() {
 
                             <Button fullWidth variant="contained" color="primary" type="submit">Log In</Button>
                             <Link to="/signup">Don't Have an Account? SignUp</Link>
+                            <Link to="/forget_password">Forget Password</Link>
+
                         </Stack>
                     </form>
                 </Paper>

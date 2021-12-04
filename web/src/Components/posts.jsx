@@ -16,27 +16,41 @@ import Stack from "@mui/material/Stack";
 import { GlobalContext } from "../Context/context";
 import Skeleton from "@mui/material/Skeleton";
 import Grid from "@mui/material/Grid";
+import LinearProgress from '@mui/material/LinearProgress';
+import { storage } from '../firebase'
+import { getDownloadURL, ref, uploadBytesResumable } from "@firebase/storage";
 
 const validationSchema = yup.object({
-  subject: yup.string("Enter your Subject").required("Email is required"),
+  subject: yup
+    .string("Enter your Subject")
+    .required("Email is required"),
+
   description: yup
     .string("Enter your Description")
     .required("Password is required"),
+
+  imageFile: yup
+    .string("Select your Image File")
+    .required("Image File is required"),
 });
 
 function Posts() {
   const [value, setValue] = React.useState("1");
+  const [progress, setProgress] = useState(0);
+  const [postBtn, setPostBtn] = useState(false)
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   let { state } = useContext(GlobalContext);
-  // console.log(state)
 
   const [allPost, setAllPost] = useState(null);
   const [continuousPost, setContinuousPost] = useState(false);
   const [currentUserPosts, setCurrentUserPosts] = useState(null);
+  // const [imglink, setImglink] = useState(null)
+
+
 
   useEffect(() => {
     axios
@@ -67,61 +81,67 @@ function Posts() {
     initialValues: {
       subject: "",
       description: "",
+      imageFile: ""
     },
 
-    onSubmit: function (values) {
+    
+    onSubmit: function (values, { resetForm }) {
       console.log(values);
+      resetForm({ values: '' })
+      setProgress(0)
+      setPostBtn(false)
+      formik.values.imageFile = ''
 
-      axios
-        .post(`${baseUrl}/api/v1/post`, {
-          user: state.user.name,
-          email: state.user.email,
-          subject: values.subject,
-          description: values.description,
-        },{
-            withCredentials:true
-        })
-        .then((res) => {
-          console.log("res: ", res.data);
-          // if (res.data) {
-          //     history.push("/login")
-          setContinuousPost(!continuousPost);
-          // }
-        });
+      // fileUpload(values.imageFile)
+
+      // axios.post(`${baseUrl}/api/v1/post`, {
+      //   user: state.user.name,
+      //   email: state.user.email,
+      //   subject: values.subject,
+      //   description: values.description,
+      //   img: state.imglink
+      // },
+      //   {
+      //     withCredentials: true
+      //   })
+      //   .then((res) => {
+      //     console.log("res: ", res.data);
+      //     // if (res.data) {
+      //     //     history.push("/login")
+      //     setContinuousPost(!continuousPost);
+      //     // }
+      //   });
+
+
     },
   });
 
-  // const [posts, setPosts] = useState(
-  //     [
-  //         {
-  //             key: 1,
-  //             avatar: 'U',
-  //             user: 'Usama Usman',
-  //             date: '27 October 2021',
-  //             main: 'Dummy',
-  //             Description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore temporibus porro quidem laborum maiores? Reprehenderit ratione ipsum recusandae nihil? Alias saepe porro possimus eligendi accusantium odit, at voluptates mollitia vel.'
 
-  //         },
+  const fileUpload = (file) => {
+    if (!file) return;
 
-  //         {
-  //             key: 2,
-  //             avatar: 'A',
-  //             user: 'Abdul Rafeh',
-  //             date: '27 October 2021',
-  //             main: 'Abdul Rafeh',
-  //             Description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore temporibus porro quidem laborum maiores? Reprehenderit ratione ipsum recusandae nihil? Alias saepe porro possimus eligendi accusantium odit, at voluptates mollitia vel.'
-  //         },
-  //         {
-  //             key: 3,
-  //             avatar: 'J',
-  //             user: 'Javed Ali',
-  //             date: '27 October 2021',
-  //             main: 'Javed Ali',
-  //             Description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore temporibus porro quidem laborum maiores? Reprehenderit ratione ipsum recusandae nihil? Alias saepe porro possimus eligendi accusantium odit, at voluptates mollitia vel.'
+    const storageRef = ref(storage, `/files/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file)
 
-  //         },
-  //     ]
-  // );
+    uploadTask.on("state_changed", (snapshot) => {
+      const prog = Math.round(
+        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+      );
+
+      setProgress(prog);
+
+    }, (err) => console.log(err),
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref)
+          .then(url => {
+            setPostBtn(true)
+            formik.values.imageFile = url
+          })
+      }
+    )
+  }
+
+
 
   return (
     <div>
@@ -162,14 +182,40 @@ function Posts() {
                 }
               />
 
-              <Button
-                fullWidth
-                variant="contained"
-                color="primary"
-                type="submit"
-              >
-                Post
-              </Button>
+
+              <input type="file" accept="image/*" name="imageFile" required
+                onChange={
+                  (event) => {
+                    // formik.setFieldValue('imageFile', event.target.files[0])
+                    fileUpload(event.target.files[0])
+                  }
+                }
+
+
+              />
+              {/* <h5>Uploaded : {progress} %</h5>
+               */}
+
+              <Box sx={{ width: '100%' }}>
+                <LinearProgress variant="determinate" value={progress} />
+              </Box>
+
+              {/* {progress > 100 ? <h1>Yes</h1> : <h1>No</h1>} */}
+
+              {postBtn ?
+                // <h1>Yes</h1>
+                <Button fullWidth variant="contained" color="primary" type="submit">Post</Button>
+                :
+                // <h1>No</h1>
+                <Button fullWidth disabled variant="contained" color="primary" >Post</Button>
+              }
+
+
+
+              {/* <Button fullWidth variant="contained" color="primary" type="submit">Post</Button>
+              <Button fullWidth disabled variant="contained" color="primary" >Post</Button> */}
+
+
             </Stack>
           </form>
         </Paper>

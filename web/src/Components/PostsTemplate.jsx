@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext} from "react";
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -11,17 +11,11 @@ import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
 import { GlobalContext } from '../Context/context'
 import ModalContent from './ModalContent'
 
 export default function AllPosts(props) {
-
     let { state } = useContext(GlobalContext);
-
-    // console.log("POst template", state)
-
-    // console.log("Data in Props ==>", props)
     return (
         <div>
 
