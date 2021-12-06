@@ -90,27 +90,29 @@ function Posts() {
       resetForm({ values: '' })
       setProgress(0)
       setPostBtn(false)
-      formik.values.imageFile = ''
+
+
+      // formik.values.imageFile = ''
 
       // fileUpload(values.imageFile)
 
-      // axios.post(`${baseUrl}/api/v1/post`, {
-      //   user: state.user.name,
-      //   email: state.user.email,
-      //   subject: values.subject,
-      //   description: values.description,
-      //   img: state.imglink
-      // },
-      //   {
-      //     withCredentials: true
-      //   })
-      //   .then((res) => {
-      //     console.log("res: ", res.data);
-      //     // if (res.data) {
-      //     //     history.push("/login")
-      //     setContinuousPost(!continuousPost);
-      //     // }
-      //   });
+      axios.post(`${baseUrl}/api/v1/post`, {
+        user: state.user.name,
+        email: state.user.email,
+        subject: values.subject,
+        description: values.description,
+        img: values.imageFile
+      },
+        {
+          withCredentials: true
+        })
+        .then((res) => {
+          console.log("res: ", res.data);
+          // if (res.data) {
+          //     history.push("/login")
+          setContinuousPost(!continuousPost);
+          // }
+        });
 
 
     },

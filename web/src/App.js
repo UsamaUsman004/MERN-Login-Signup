@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect ,useContext} from "react";
+import { useEffect, useContext } from "react";
 import SignUp from "./Components/signup";
 import LogIn from "./Components/login";
 import Profile from "./Components/profile";
@@ -10,7 +10,6 @@ import forgetPassword from "./Components/forgetPassword";
 import axios from "axios";
 import { GlobalContext } from "./Context/context";
 // import {storage} from './firebase'
-
 
 function App() {
   let { state, dispatch } = useContext(GlobalContext);
@@ -44,13 +43,12 @@ function App() {
     return () => {};
     // eslint-disable-next-line
   }, []);
-
-
-
-  
+  console.log(state.user);
 
   return (
     <div>
+      {/* {console.log(state.user)} */}
+
       {/* <Switch>
         <Route path="/login">
           <LogIn />
@@ -68,6 +66,7 @@ function App() {
           <Dashboard />
         </Route>
       </Switch> */}
+
       {state.user === undefined ? (
         <Switch>
           <Route exact path="/">
@@ -80,6 +79,7 @@ function App() {
           </Route>
         </Switch>
       ) : null}
+
       {state.user === null ? (
         <Switch>
           <Route exact path="/" component={Dashboard} />
@@ -91,6 +91,7 @@ function App() {
           </Route>
         </Switch>
       ) : null}
+
       {state.user ? (
         <Switch>
           <Route exact path="/" component={Dashboard} />
